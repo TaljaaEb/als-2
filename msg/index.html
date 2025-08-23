@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>IPC Test</title>
+</head>
+<body>
+  <h2>IPC Bridge Test</h2>
+  <div id="latestMessage">Latest Message: </div>
+  <button onclick="sendToService('12345')">Send 12345</button>
+
+  <script>
+    // --- Read latest message from service ---
+    function readFromService() {
+      fetch("http://127.0.0.1:8889/ipc")
+        .then(res => res.text())
+        .then(data => {
+          console.log("Received from service:", data);
+          document.getElementById("latestMessage").innerText = "Latest Message: " + data;
+          var ipcValue = data; // JS variable with latest message
+        })
+        .catch(err => console.error("IPC read error:", err));
+    }
+
+    // Auto-read every 2 seconds
+    setInterval(readFromService, 2000);
+    readFromService(); // initial read
+
+    // --- Send new message to service ---
+    function sendToService(msg) {
+      fetch("http://127.0.0.1:8889/ipc", { 
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: msg
+      })
+      .then(res => res.text())
+      .then(data => {
+        console.log("Service response:", data);
+        readFromService(); // update display immediately
+      })
+      .catch(err => console.error("IPC send error:", err));
+    }
+  </script>
+</body>
+</html>
