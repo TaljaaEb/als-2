@@ -46,18 +46,16 @@ def trigger_b():
         s.connect((B_TRIGGER_HOST, B_TRIGGER_PORT))
         s.sendall(b"SUCCESS")
 
-def evolve_transactions():
-    """Randomly update quantity or price for an item"""
-    idx = random.randint(0, len(transactions)-1)
-    parts = transactions[idx].split()
-    if random.choice([True, False]):
-        # change quantity
-        parts[-2] = str(int(parts[-2]) + random.randint(1, 3))
-    else:
-        # change price
-        parts[-1] = f"{float(parts[-1]) + round(random.uniform(0.5, 2.0), 2):.2f}"
-    transactions[idx] = " ".join(parts)
-    print(f"[A] Evolved: {transactions[idx]}")
+def listen_for_checkout():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.bind(("0.0.0.0", 6000))
+        s.listen(5)
+        print("[A] Listening for checkout IPC on 6000...")
+        while True:
+            conn, addr = s.accept()
+            data = conn.recv(1024).decode()
+            if data.startswith("CHECKOUT"):
+                print("[A] Checkout event:", data)
 
 if __name__ == "__main__":
     mode = input("Run with transaction evolution? (Y/N): ").strip().upper()
@@ -70,7 +68,6 @@ if __name__ == "__main__":
         print("[A] Running with transaction evolution mode ON")
         while True:
             time.sleep(EVOLUTION_INTERVAL)
-            evolve_transactions()
             send_to_c()
             trigger_b()
     else:
