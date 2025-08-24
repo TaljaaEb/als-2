@@ -1,0 +1,16 @@
+# 1. Pull Method (Simplest)
+  
+  Example endpoint:
+  
+  GET /feed?source=A&limit=100
+
+# 2. Push Method (True Streaming)
+
+  Streaming Dataset
+
+  import requests
+
+  YOUR_URL = "https://your_url/test/your_dataset_url"
+
+  def push_to(log_record):
+      requests.post(URL, json=[log_record])
