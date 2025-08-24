@@ -58,8 +58,12 @@ def listen_for_checkout():
                 print("[A] Checkout event:", data)
 
 if __name__ == "__main__":
-    mode = input("Run with transaction evolution? (Y/N): ").strip().upper()
-
+    #mode = input("Run with transaction evolution? (Y/N): ").strip().upper()
+    mode = "Y"
+    
+    listen_for_checkout()
+    
+# the lines below needs rework !!!
     # Initial send
     send_to_c()
     trigger_b()
