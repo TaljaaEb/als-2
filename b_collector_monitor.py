@@ -31,7 +31,9 @@ def wait_for_success():
                 data = conn.recv(1024).decode().strip()
                 if data == "SUCCESS":
                     print("[B] Received SUCCESS trigger from A")
-                    handle_transaction_pull()
+                    #handle_transaction_pull()
+                else:
+                    print(data)
 
 def handle_transaction_pull():
     """Pull data from A and send to C."""
