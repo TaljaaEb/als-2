@@ -16,7 +16,7 @@ HTTP_PORT = 8000
 EVOLUTION_INTERVAL = 10  # seconds
 
 # --- DATA ---
-transactions = [
+itemlines = [
     "101 18V Cordless Drill 2 89.99",
     "102 6-inch Wood Clamp 4 12.50",
     "103 Carpenter's Hammer 1 19.99"
@@ -24,16 +24,16 @@ transactions = [
 
 class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
-        if self.path == "/transactions":
+        if self.path == "/itemlines":
             self.send_response(200)
             self.send_header("Content-type", "text/plain")
             self.end_headers()
-            for t in transactions:
-                self.wfile.write(f"<item>{t}</item>\n".encode())
+            for ln in itemlines:
+                self.wfile.write(f"<custom>{ln}</custom>\n".encode())
 
 def send_to_c():
-    """Send transactions to C"""
-    payload = {"source": "A", "transactions": transactions}
+    """Send itemlines to C"""
+    payload = {"source": "A", "itemlines": itemlines}
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((C_HOST, C_PORT))
         s.sendall(json.dumps(payload).encode())
@@ -58,24 +58,8 @@ def listen_for_checkout():
                 print("[A] Checkout event:", data)
 
 if __name__ == "__main__":
-    #mode = input("Run with transaction evolution? (Y/N): ").strip().upper()
-    mode = "Y"
-    
-    listen_for_checkout()
-    
-# the lines below needs rework !!!
-    # Initial send
-    send_to_c()
-    trigger_b()
-
-    if mode == "Y":
-        print("[A] Running with transaction evolution mode ON")
-        while True:
-            time.sleep(EVOLUTION_INTERVAL)
-            send_to_c()
-            trigger_b()
-    else:
-        print("[A] Static mode, serving HTTP only")
-        server = HTTPServer(("0.0.0.0", HTTP_PORT), Handler)
-        print(f"[A] HTTP server running on port {HTTP_PORT}...")
-        server.serve_forever()
+    #listen_for_checkout()
+    print("[A] Static mode, serving HTTP only")
+    server = HTTPServer(("0.0.0.0", HTTP_PORT), Handler)
+    print(f"[A] HTTP server running on port {HTTP_PORT}...")
+    server.serve_forever()
