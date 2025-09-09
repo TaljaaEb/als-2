@@ -38,8 +38,8 @@ def wait_for_success():
 def handle_transaction_pull():
     """Pull data from A and send to C."""
     try:
-        r = requests.get("http://127.0.0.1:8000/transactions")
-        items = extract_strings_recursive(r.text, "item")
+        r = requests.get("http://127.0.0.1:8000/itemlines")
+        items = extract_strings_recursive(r.text, "custom")
         print(f"[B] Parsed items: {items}")
         send_to_c(items)
     except Exception as e:
