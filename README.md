@@ -1,5 +1,7 @@
 ![alt text](https://github.com/TaljaaEb/als-2/blob/main/Ai%20Generated%20Image%20Sep%2011%2C%202025%2C%2004_45_51%20PM.png?raw=true)
 
+![alt text](https://github.com/TaljaaEb/als-2/blob/main/Ai%20Generated%20Image%20Sep%2011%2C%202025%2C%2004_45_51%20PM.png?raw=true)
+
 ![alt text](https://github.com/TaljaaEb/als-2/blob/main/ALS-Triple-Validation.png?raw=true)
 
 ```
